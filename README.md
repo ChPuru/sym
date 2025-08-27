@@ -148,10 +148,6 @@ sym/
 
 Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
 
-## License
-
-[Add your license information here]
-
 ---
 
 *Built with ❤️ as an exploration of programming language design and implementation.*
