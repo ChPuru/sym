@@ -1,0 +1,52 @@
+// Import standard libraries
+import "math.sym"
+import "list.sym"
+
+// Print a welcome message
+# "--- Welcome to the Final Sym Demo --- \n\n" .
+
+// --- First-class functions and map ---
+(square n) { :n :n * }
+
+# "Testing list.map with a 'square' closure: \n" .
+[ #1 #2 #3 #4 ] &square &map @ .
+# "\n" .
+
+// --- Reduce ---
+(add a b) { :a :b + }
+# "Testing list.reduce to sum a list: \n" .
+[ #1 #2 #3 #4 ] #0 &add &reduce @ .
+# "\n\n" .
+
+// --- Maps ---
+# "Testing map data structure:\n" .
+#{ "name": #"John Doe", "age": #42, "active": #1 } user:
+
+# "User's name: " .
+:user #"name" get .
+# "\n" .
+
+// --- Debugger ---
+# "Entering debugger. Type 's' to see the stack, then 'c' to continue.\n" .
+dbg
+
+// --- FFI ---
+# "Testing Foreign Function Interface (FFI)...\n" .
+
+// --- THIS IS THE CORRECTED LOGIC ---
+// Push the C function's arguments first
+#20.2                       // Arg 1
+#10.5                       // Arg 2
+
+// Push the FFI operator's arguments
+#2                          // The integer count of C arguments
+#"libexample.dll"
+#"add_doubles"
+ffi .                       // Call the FFI operator
+# "\n" .
+// --- END OF CORRECTION ---
+
+// --- Error Handling ---
+# "Finally, demonstrating a runtime error.\n" .
+# "This will cause a controlled crash with a stack trace:\n" .
+:user #"email" get // This key does not exist

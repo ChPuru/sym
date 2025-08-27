@@ -1,0 +1,61 @@
+// -----------------------------------------------------------------
+// Mandelbrot Set Renderer for the Sym Programming Language
+//
+// This program demonstrates the power of Sym by performing
+// complex floating-point calculations to render a fractal.
+// This version includes aspect ratio correction for standard terminals.
+// -----------------------------------------------------------------
+
+// --- Configuration Constants ---
+#35.0 IMAGE_HEIGHT:  // How many rows in the terminal
+#80.0 IMAGE_WIDTH:   // How many columns
+#32 MAX_ITERATIONS:  // Calculation depth. Higher is more detailed but slower.
+
+// This function is the heart of the Mandelbrot calculation.
+(get_mandelbrot_iterations cr ci) {
+    #0.0 zr: #0.0 zi: #0 iter:
+
+    while {
+        :iter :MAX_ITERATIONS lt
+        :zr :zr * :zi :zi * + #4.0 lt
+        and
+    } {
+        :zr :zr * :zi :zi * - :cr + new_zr:
+        #2.0 :zr * :zi * :ci + new_zi:
+
+        :new_zr zr: :new_zi zi:
+        :iter #1 + iter:
+    }
+    :iter
+}
+
+// --- Main Program Execution ---
+#0.0 y:
+while { :y :IMAGE_HEIGHT lt } {
+    #0.0 x:
+    while { :x :IMAGE_WIDTH lt } {
+        // Map the (x, y) screen coordinates to the complex plane coordinates (cr, ci)
+        
+        // --- THIS IS THE CORRECTED MAPPING LOGIC ---
+        // We widen the horizontal range to account for the ~2:1 aspect ratio of terminal fonts.
+        :x :IMAGE_WIDTH / #3.5 * #2.5 - cr:
+        :y :IMAGE_HEIGHT / #2.0 * #1.0 - ci:
+        // --- END OF CORRECTION ---
+
+        :cr :ci &get_mandelbrot_iterations @ iterations:
+
+        :iterations :MAX_ITERATIONS eq ? {
+            #"#" 
+        } ! {
+            :iterations #15 gt ? { #"O" } ! {
+                :iterations #10 gt ? { #"o" } ! {
+                    :iterations #5 gt ? { #"." } ! { #" " }
+                }
+            }
+        }
+        . 
+        :x #1.0 + x:
+    }
+    #"\n" . 
+    :y #1.0 + y:
+}

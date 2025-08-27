@@ -1,0 +1,8 @@
+{
+  "name": "sym-main-project",
+  "version": "1.0.0",
+  "dependencies": {
+    "math": "stdlib/math.sym",
+    "list": "stdlib/list.sym"
+  }
+}

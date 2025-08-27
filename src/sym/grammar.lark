@@ -1,0 +1,112 @@
+?start: program
+
+program: (statement)*
+
+?statement: import_stmt
+          | push
+          | add 
+          | sub 
+          | mul 
+          | div 
+          | mod
+          | eq 
+          | neq 
+          | lt 
+          | gt 
+          | lte 
+          | gte
+          | and_op 
+          | or_op 
+          | not_op
+          | print
+          | store 
+          | load
+          | dup 
+          | swap 
+          | drop 
+          | rot
+          | conditional
+          | list_literal 
+          | map_literal
+          | get_item 
+          | set_item 
+          | length
+          | while_loop
+          | function_def 
+          | function_ref 
+          | function_call
+          | input
+          | ffi_call
+          | debug_break
+
+// --- Definitions ---
+
+import_stmt: "import" ESCAPED_STRING -> import_stmt
+
+push: "#" value -> push
+value: SIGNED_INT -> integer
+     | SIGNED_FLOAT -> float
+     | ESCAPED_STRING -> string
+
+// Operators
+add: "+" -> add
+sub: "-" -> sub
+mul: "*" -> mul
+div: "/" -> div
+mod: "%" -> mod
+eq: "eq" -> eq
+neq: "neq" -> neq
+lt: "lt" -> lt
+gt: "gt" -> gt
+lte: "lte" -> lte
+gte: "gte" -> gte
+and_op: "and" -> and_op
+or_op: "or" -> or_op
+not_op: "not" -> not_op
+
+// Variable & Stack
+store: CNAME ":" -> store
+load: ":" CNAME -> load
+dup: "d" -> dup
+swap: "s" -> swap
+drop: "~" -> drop
+rot: "r" -> rot
+
+// Control Flow
+conditional: "?" "{" program "}" ("!" "{" program "}")? -> conditional
+while_loop: "while" "{" program "}" "{" program "}" -> while_loop
+
+// Data Structures
+list_literal: "[" program "]" -> list_literal
+map_literal: "#" "{" (map_pair ("," map_pair)*)? "}" -> map_literal
+map_pair: value ":" program
+get_item: "get" -> get_item
+set_item: "set" -> set_item
+length: "len" -> length
+
+// Functions
+function_def: "(" CNAME (CNAME)* ")" "{" program "}" -> function_def
+function_ref: "&" CNAME -> function_ref
+function_call: "@" -> function_call
+
+// I/O & Debug
+input: "in" -> input
+print: "." -> print
+ffi_call: "ffi" -> ffi_call
+debug_break: "dbg" -> debug_break
+
+// --- Imports & Config ---
+
+// Import common terminals from Lark's library
+%import common.CNAME
+%import common.SIGNED_INT
+%import common.SIGNED_FLOAT
+%import common.ESCAPED_STRING
+%import common.WS
+
+// NEW DEFINITION: Explicitly define what a line comment is
+LINE_COMMENT: "//" /[^\n]*/
+
+// Ignore whitespace and our new line comment terminal
+%ignore WS
+%ignore LINE_COMMENT

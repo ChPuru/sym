@@ -1,0 +1,21 @@
+(map list func) {
+    [] new_list:
+    #0 i:
+    // CORRECTED: Use 'lt' instead of '<'
+    while { :i :list len lt } {
+        :new_list :list :i get :func @ + new_list:
+        :i #1 + i:
+    }
+    :new_list
+}
+
+(reduce list initial_value func) {
+    :initial_value acc:
+    #0 i:
+    // CORRECTED: Use 'lt' instead of '<'
+    while { :i :list len lt } {
+        :acc :list :i get :func @ acc:
+        :i #1 + i:
+    }
+    :acc
+}

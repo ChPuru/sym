@@ -1,0 +1,2 @@
+#10.5 #2.5 + .  // Should print 13.0
+#10 #2.5 * .   // Should print 25.0

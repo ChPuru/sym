@@ -1,0 +1,14 @@
+(max a b) {
+    // CORRECTED: Use 'gt' instead of '>'
+    :a :b gt ? { :a } ! { :b }
+}
+
+(min a b) {
+    // CORRECTED: Use 'lt' instead of '<'
+    :a :b lt ? { :a } ! { :b }
+}
+
+(abs n) {
+    // CORRECTED: Use 'lt' instead of '<'
+    :n #0 lt ? { :n #-1 * } ! { :n }
+}
